@@ -22,40 +22,6 @@ MSCONNECTION = pyodbc.connect(
 
 MYCONNECTION = MySQLdb.connect("localhost", "imauser", "imapassword", "business_contracts")
 
-re_tok = re.compile('([' + string.punctuation + '“”¨«»®´·º½¾¿¡§£₤‘’])')
-
-
-def tokenize(text):
-    return re_tok.sub(r' \1 ', text.lower()).split()
-
-
-vectorizer = TfidfVectorizer(tokenizer=tokenize, stop_words='english')
-
-
-def cosineSim(text1, text2):
-    tfidf = vectorizer.fit_transform([text1, text2])
-    return ((tfidf * tfidf.T).A)[0, 1]
-
-
-WORD = re.compile(r'\w+')
-
-
-def getCosine(vec1, vec2):
-    intersection = set(vec1.keys()) & set(vec2.keys())
-    numerator = sum([vec1[x] * vec2[x] for x in intersection])
-    sum1 = sum([vec1[x]**2 for x in vec1.keys()])
-    sum2 = sum([vec2[x]**2 for x in vec2.keys()])
-    denominator = math.sqrt(sum1) * math.sqrt(sum2)
-    if not denominator:
-        return 0.0
-    else:
-        return float(numerator) / denominator
-
-
-def text2vector(text):
-    words = WORD.findall(text)
-    return Counter(words)
-
 
 def getMeanFuzz(dataX, dataY):
     fuzz_ratio = fuzz.ratio(dataX, dataY)
