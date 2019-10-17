@@ -14,17 +14,17 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('~/git/TextMatcher/'))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'TextMatcher'
+project = 'Database Text Matching'
 copyright = '2019, Edward O\'Donnell'
 author = 'Edward O\'Donnell'
 
 # The short X.Y version
-version = ''
+version = '1'
 # The full version, including alpha/beta/rc tags
 release = '0.0.1'
 
@@ -106,7 +106,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'TextMatcherdoc'
+htmlhelp_basename = 'DatabaseTextMatchingdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -133,7 +133,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'TextMatcher.tex', 'TextMatcher Documentation',
+    (master_doc, 'DatabaseTextMatching.tex', 'Database Text Matching Documentation',
      'Edward O\'Donnell', 'manual'),
 ]
 
@@ -143,7 +143,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'textmatcher', 'TextMatcher Documentation',
+    (master_doc, 'databasetextmatching', 'Database Text Matching Documentation',
      [author], 1)
 ]
 
@@ -154,8 +154,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'TextMatcher', 'TextMatcher Documentation',
-     author, 'TextMatcher', 'One line description of project.',
+    (master_doc, 'DatabaseTextMatching', 'Database Text Matching Documentation',
+     author, 'DatabaseTextMatching', 'One line description of project.',
      'Miscellaneous'),
 ]
 
