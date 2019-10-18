@@ -1,7 +1,8 @@
 Configuration of Project Environment
 *************************************
 
-This is a python module that matches text from a database table. Using Python3, Fuzzywuzzy, mysql, pydboc and other libraries.
+This is a python module that matches text from a database table. It is useful when you allowed you're users to enter text that gets
+redundant. It uses python3, Fuzzywuzzy, mysql, pydboc and other libraries.
 
 Overview on How to Run this API
 ================================
@@ -38,8 +39,8 @@ A. Configure
 B. Edit connections.py 
 ---------------
 
-    open up connections.py (you might have to create it as it has passwords and is not stored in git)
-    it will look something like:
+    Edit/create the connections.py file. (you might have to create it as it has passwords and is not stored in git)
+    It should look something like:
     
     import MySQLdb
 	MYCONNECTION = MySQLdb.connect("localhost", "user", "pass", "db_table")
