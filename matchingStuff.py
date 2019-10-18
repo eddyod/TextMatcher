@@ -7,12 +7,14 @@ Main class for matching text from a database.
 import itertools
 from contextlib import closing
 import sys
+import seaborn as sns; sns.set
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 from matchfactory import MatchFactory
+from connections import MYCONNECTION
 
-import MySQLdb
-
-THRESHOLD = 0.72  # cutoff number
-MYCONNECTION = MySQLdb.connect("localhost", "user", "pass", "db")
+THRESHOLD = 0.90  # cutoff number
 
 
 class MatchingStuff:
@@ -43,7 +45,7 @@ class MatchingStuff:
         count = 1
         for x, y in itertools.combinations(shingle_dict, 2):
             percent = (count / float(cl)) * 100
-            sys.stdout.write("Percent done = %0.4f%% Comparing: x:%d with y:%d   \r" % (percent, x, y))
+            sys.stdout.write("Percent done = %0.4f%% Comparing: x:%s with y:%s   \r" % (percent, x, y))
             sys.stdout.flush()
             dataX = shingle_dict[x]
             dataY = shingle_dict[y]
@@ -54,41 +56,6 @@ class MatchingStuff:
                 if x not in deletes:
                     jaccard_data.append([x, y, score, dataX, dataY])
         return jaccard_data
-
-
-    def sortAndPrint(self, jaccard_data, outputFile):
-        """ Takes in a list of lists, sorts it, then writes
-        it to a nice output file for viewing
-        Args:
-            jaccard_data: list of lists to be sorted and outputted
-            outputFile: name of file to write to
-        """
-        print('\nSorting data into {}'.format(outputFile))
-        sorted_list = sorted(jaccard_data, key=lambda x: x[2], reverse=True)
-        f = open(outputFile, "w")
-        count = 1
-        f.write("Score\t")
-        f.write("ID - A\t")
-        f.write("Match A\t")
-        f.write("ID - B\t")
-        f.write("Match B\n")
-        for row in sorted_list:
-            x = row[0]
-            y = row[1]
-            score = row[2]
-            dataX = row[3]
-            dataY = row[4]
-            f.write("{0:.2f}".format(round(score, 4)))
-            f.write("\t")
-            f.write(str(x).ljust(5))
-            f.write("\t")
-            f.write(str(dataX))
-            f.write("\t")
-            f.write(str(y).ljust(5))
-            f.write("\t")
-            f.write(str(dataY))
-            f.write("\n")
-            count += 1
 
 
 
@@ -164,6 +131,12 @@ class MatchingStuff:
         sql = 'select sponsor_id, sponsor_name from sponsor limit {}'.format(limit)
         return self.rowsToDictionary(sql)
 
+    def getSciFiData(self, limit):
+        """ fetch data, first field has to be the primary key """
+        sql = 'select concat(t.abbrv," - S",e.season," - E",e.episode_number," ",e.title) as X, trim(synopsis) from episode e inner join tv_show t on e.show_id = t.show_id where synopsis is not null and t.show_id >= 1 order by t.abbrv,e.season,e.episode_number limit {}'.format(limit)
+              
+                
+        return self.rowsToDictionary(sql)
 
     def rowsToDictionary(self, sql):
         """ take rows for a database query and turn it into a dictionary
@@ -177,3 +150,42 @@ class MatchingStuff:
             except Exception:
                 print("Error selecting data.")
         return {row[0]: ' '.join(row[1:]) for row in rows}
+
+    def heatmap(self, x_labels, y_labels, values):
+        fig, ax = plt.subplots()
+        im = ax.imshow(values)
+    
+        # We want to show all ticks...
+        ax.set_xticks(np.arange(len(x_labels)))
+        ax.set_yticks(np.arange(len(y_labels)))
+        # ... and label them with the respective list entries
+        ax.set_xticklabels(x_labels)
+        ax.set_yticklabels(y_labels)
+    
+        # Rotate the tick labels and set their alignment.
+        plt.setp(ax.get_xticklabels(), rotation=45, ha="right", fontsize=10,
+             rotation_mode="anchor")
+    
+        # Loop over data dimensions and create text annotations.
+        for i in range(len(y_labels)):
+            for j in range(len(x_labels)):
+                text = ax.text(j, i, "%.2f" % values[i, j],
+                               ha="center", va="center", color="w", fontsize=6)
+    
+        fig.tight_layout()
+        plt.show()
+        
+        
+
+    def createDataframe(self, shingle_dict):
+        """Creates a pandas dataframe of score, IDs and the data.
+        Iterates over all combinations without repeating combinations.
+        Still uses lots of iterations as the number of iterations
+        goes up non-linearly. Takes a long time after 5000 rows or so.
+        Args:
+            shingle_dict: dictionary of data from an sql query
+        """
+        jaccard_data = self.calculateScoresAndMatch(shingle_dict)
+        df = pd.DataFrame(jaccard_data, columns=['x', 'y', 'score', 'dataX', 'dataY'])
+        sorted_df = df.sort_values(by=['score'], ascending = False)
+        return sorted_df
