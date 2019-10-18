@@ -5,7 +5,7 @@ This is a python module that matches text from a database table. Using Python3, 
 
 Overview on How to Run this API
 ================================
-1. Either install a Python virtualenv
+1. Install a Python virtualenv
 2. Install packages required
 3. Have access to the mysql or MS sql server
 4. Have access to a linux server that can access the databases
@@ -44,8 +44,8 @@ B. Edit connections.py
     import MySQLdb
 	MYCONNECTION = MySQLdb.connect("localhost", "user", "pass", "db_table")
     
-    in an editor and set the username, password, database etc. There are two connections. Comment
-    out the one you don't want to use.
+    In an editor, set the username, password, database etc. 
+    You can add muliple connections but you'll have to import the correct one into the matchingStuff.py file. 
 
 C. Edit matchingStuff.py 
 ---------------------------------------------------------------------------
@@ -54,7 +54,8 @@ C. Edit matchingStuff.py
 
 D. Edit runme.py 
 ---------------------------------------------------------------------------
-	Edit this file and make sure you have the methods you want to run. You'll need a fetch method at the least. Look at the existing code
+	Edit this file and make sure you have the methods you want to run. 
+	You'll need a fetch method at the least. Look at the existing code
 	for an example. Then, from the command line:
 	
 	python runme.py
