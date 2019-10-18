@@ -23,11 +23,11 @@ A. Configure
         mkdir ~/.virtualenvs
         
 
-    - Create virtialenv (note, I use the work matching below, it can be anything)
+    - Create virtualenv (note, I use the word matching below, it can be anything)
 
         python3 -m venv ~/.virtualenv/matching
         
-    - Activate virtialenv 
+    - Activate virtualenv 
 
         source ~/.virtualenv/matching/bin/activate
 
@@ -40,7 +40,7 @@ B. Edit connections.py
 ---------------
 
     Edit/create the connections.py file. (you might have to create it as it has passwords and is not stored in git)
-    It should look something like:
+    - It should look something like:
     
         import MySQLdb
         MYCONNECTION = MySQLdb.connect("localhost", "user", "pass", "db_table")
