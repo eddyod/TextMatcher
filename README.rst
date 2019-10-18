@@ -42,8 +42,8 @@ B. Edit connections.py
     Edit/create the connections.py file. (you might have to create it as it has passwords and is not stored in git)
     It should look something like:
     
-import MySQLdb
-MYCONNECTION = MySQLdb.connect("localhost", "user", "pass", "db_table")
+	import MySQLdb
+	MYCONNECTION = MySQLdb.connect("localhost", "user", "pass", "db_table")
     
     In an editor, set the username, password, database etc. 
     You can add muliple connections but you'll have to import the correct one into the matchingStuff.py file. 
