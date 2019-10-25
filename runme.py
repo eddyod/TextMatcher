@@ -1,4 +1,4 @@
-'''
+"""
 Created on Aug 17, 2019
 Main program to run.
 Currently there are 4 factories to use. The default is fuzzywuzzy. It
@@ -7,22 +7,27 @@ has good results and is very fast.
 2. CosineMatcher
 3. NltkMatcher
 4. TfidfMatcher
+5. JaroMatcher
 @author: eodonnell@ucsd.edu
-'''
-from matchingStuff import MatchingStuff
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+"""
+from pprint import pprint as pp
 
+from matchingStuff import MatchingStuff
 
 matcher = MatchingStuff('FuzzyMatcher')
 
-data_dict = matcher.getSponsorData(10000)
+data_dict = matcher.getSponsorData(5000)
 #print(data_dict)
+# df = pd.DataFrame.from_dict(data_dict, columns=['title', 'synopsis'], orient = 'index')
+# df = pd.DataFrame(list(data_dict.items()), columns=['title', 'synopsis'])
 df = matcher.createDataframe(data_dict)
-print(df.head(25))
-df.to_csv("sponsors.csv", index = False)
+# print(df[['score', 'x', 'y', 'dataX']].head(25))
+pp(df.head(50))
 
+# df = df[['score', 'x', 'y', 'dataX']]
+# df['dataX'] = df['dataX'].str[:50]
+# df['dataY'] = df['dataY'].str[:50]
+df.to_csv("sponsors.csv", index=False)
 """
 heatmap1_data = pd.pivot_table(df, values='score', 
                      index=['x'], 
@@ -31,5 +36,3 @@ heatmap1_data = pd.pivot_table(df, values='score',
 hm = sns.heatmap(heatmap1_data, cmap="YlGnBu")
 plt.show()
 """
-#matched_data = matcher.calculateScoresAndMatch(data_dict)
-#matcher.sortAndPrint(matched_data, 'sponsors.txt')
