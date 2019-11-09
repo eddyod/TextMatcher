@@ -4,7 +4,7 @@ Created on Aug 17, 2019
 @author: eodonnell@ucsd.edu
 """
 from inspect import getmembers, isclass, isabstract
-from typing import Dict, Any
+#from typing import Dict, Any
 
 import matchingmethods
 
@@ -13,7 +13,8 @@ class MatchFactory(object):
     """
     classdocs
     """
-    matchermethods: Dict[Any, Any] = {}
+    #matchermethods: Dict[Any, Any] = {}
+    matchermethods = {}
 
     def __init__(self):
         """

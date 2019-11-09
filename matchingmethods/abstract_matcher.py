@@ -9,7 +9,7 @@ import abc
 
 class AbstractMatcher(metaclass=abc.ABCMeta):
     """ initial abstract class"""
-    
+        
     @property
     def name(self):
         return self._name
@@ -20,4 +20,4 @@ class AbstractMatcher(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def calculate(self):
-        pass
+        raise NotImplemented("This method must be used.")

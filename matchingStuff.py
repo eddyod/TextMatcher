@@ -15,14 +15,17 @@ import pandas as pd
 from connections import MYCONNECTION
 from matchfactory import MatchFactory
 
-THRESHOLD = 0.80  # cutoff number
+THRESHOLD = 0.050  # cutoff number
 
 
 
 class MatchingStuff:
     """ Main class for matching text strings from a database"""
     
-    def __init__(self, factory_method):
+    THRESHOLD = 0.10  # cutoff number
+
+    
+    def __init__(self, factory_method, threshold):
         """ sets up the class with the factory method, DB connection and threshold
         Args:
             factory_method: string showing which text matching method to use
@@ -31,7 +34,14 @@ class MatchingStuff:
         self.matching_method = factory.create_instance(factory_method)
         self._factory_method = factory_method
         self._connection = MYCONNECTION
-        self._threshold = THRESHOLD
+        if threshold < MatchingStuff.THRESHOLD:
+            raise ValueError("Threshold is too low.")
+        self._threshold = threshold
+        
+    def __repr__(self):
+        return 'MatchingStuff object: '.format(self._factory_method)
+
+        
 
     def factory_method(self):
         return self._factory_method
@@ -134,7 +144,7 @@ class MatchingStuff:
 
     def getSciFiData(self, limit):
         """ fetch data, first field has to be the primary key """
-        sql = "select concat(t.abbrv,'.S',e.season,'.E',e.episode_number,' ',trim(e.title)) as x," \
+        sql = "select e.episode_id, concat(t.abbrv,'.S',e.season,'.E',e.episode_number,' ',trim(e.title)) as x," \
               " replace(synopsis,'\n','') as y" \
               " from episode e inner join tv_show t on e.show_id = t.show_id" \
               " where synopsis is not null and t.show_id = 1 " \
