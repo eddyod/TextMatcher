@@ -12,6 +12,8 @@ from collections import Counter
 
 from .abstract_matcher import AbstractMatcher
 
+WORD = re.compile(r'\w+')
+
 
 class CosineMatcher(AbstractMatcher):
     
@@ -26,8 +28,8 @@ class CosineMatcher(AbstractMatcher):
         Yields:
             float of the cosine similarity
         """
-        vec1 = text_to_vector(dataX)
-        vec2 = text_to_vector(dataY)
+        vec1 = self.text_to_vector(dataX)
+        vec2 = self.text_to_vector(dataY)
         intersection = set(vec1.keys()) & set(vec2.keys())
         numerator = sum([vec1[x] * vec2[x] for x in intersection])
 
@@ -41,9 +43,7 @@ class CosineMatcher(AbstractMatcher):
             return float(numerator) / denominator
 
 
-WORD = re.compile(r'\w+')
-
-
-def text_to_vector(text):
-    words = WORD.findall(text)
-    return Counter(words)
+    @staticmethod
+    def text_to_vector(text):
+        words = WORD.findall(text)
+        return Counter(words)
